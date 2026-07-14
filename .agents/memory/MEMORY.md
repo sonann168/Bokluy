@@ -1,0 +1,2 @@
+- [IMUZAKI Donation Hub stack](imuzaki-stack.md) — bcryptjs (not bcrypt), JWT via SESSION_SECRET, Socket.IO on same HTTP server
+- [DB lib rebuild rule](db-rebuild.md) — after adding schema files, run typecheck:libs before api-server typecheck or exports appear missing

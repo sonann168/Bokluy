@@ -1,0 +1,529 @@
+You are an Elite Senior Full-Stack Software Engineer, UI/UX Designer, DevOps Engineer, Security Engineer, and System Architect.
+
+Your mission is to build a complete production-ready Stream Donation Platform called:
+
+IMUZAKI DONATION HUB
+
+This platform is for a single streamer (personal use only).
+
+==================================================
+DESIGN STYLE
+==================================================
+
+Use the attached image only as visual inspiration.
+
+DO NOT copy any artwork, icons, textures, graphics, fonts, or assets.
+
+Create an entirely original UI inspired by:
+
+• Cartoon gaming interface
+• Modern game launcher
+• StreamElements
+• Streamlabs
+• Discord
+• Twitch
+• Premium esports dashboard
+
+Color Palette
+
+Primary
+#7B2EFF
+
+Secondary
+#FFB100
+
+Accent
+#FF5A36
+
+Highlight
+#45B7FF
+
+Background
+
+Dark purple gradient
+
+Animated particles
+
+Glow effects
+
+Glassmorphism
+
+Rounded cards
+
+Soft shadows
+
+Premium gaming feeling
+
+==================================================
+TECH STACK
+==================================================
+
+Next.js (App Router)
+
+TypeScript
+
+Tailwind CSS
+
+ShadCN UI
+
+Framer Motion
+
+Node.js
+
+Express
+
+Socket.IO
+
+PostgreSQL
+
+Drizzle ORM
+
+JWT
+
+bcrypt
+
+Docker
+
+Nginx
+
+PM2
+
+==================================================
+PROJECT STRUCTURE
+==================================================
+
+Public Website
+
+Admin Dashboard
+
+OBS Overlay
+
+REST API
+
+Database
+
+Authentication
+
+Analytics
+
+Settings
+
+Notifications
+
+Activity Logs
+
+==================================================
+PUBLIC WEBSITE
+==================================================
+
+Landing Page
+
+Donation Page
+
+Recent Donations
+
+Top Supporters
+
+Donation Goal
+
+About
+
+Terms
+
+Privacy
+
+Responsive
+
+==================================================
+DONATION PAGE
+==================================================
+
+Donation Form
+
+Fields
+
+Name
+
+Anonymous Toggle
+
+Amount
+
+Currency
+
+Message
+
+Payment Method
+
+Only one payment method:
+
+ABA PayWay Auto Pay
+
+Buttons
+
+Donate
+
+Cancel
+
+Validation
+
+Success Page
+
+Failure Page
+
+Pending Page
+
+==================================================
+ABA PAYWAY
+==================================================
+
+Implement ABA PayWay Auto Pay.
+
+Requirements
+
+Create payment request
+
+Redirect user to payment page
+
+Receive callback
+
+Verify payment
+
+Webhook verification
+
+Store transactions
+
+Payment status
+
+Pending
+
+Paid
+
+Failed
+
+Cancelled
+
+Refunded
+
+Environment Variables
+
+Merchant ID
+
+API Key
+
+Hash Key
+
+Webhook Secret
+
+Never expose secrets to frontend.
+
+==================================================
+ADMIN DASHBOARD
+==================================================
+
+Login
+
+Dashboard
+
+Overview
+
+Today's Revenue
+
+Weekly Revenue
+
+Monthly Revenue
+
+Total Donations
+
+Recent Donations
+
+Top Donators
+
+Revenue Charts
+
+Donation Table
+
+Search
+
+Filter
+
+Pagination
+
+Export CSV
+
+Export Excel
+
+Settings
+
+Themes
+
+Goals
+
+Notifications
+
+Profile
+
+Activity Logs
+
+==================================================
+OBS OVERLAY
+==================================================
+
+Browser Source URL
+
+Transparent Background
+
+Realtime Socket.IO
+
+Animated Alert
+
+Avatar
+
+Username
+
+Donation Amount
+
+Donation Message
+
+Animated Goal Bar
+
+Latest Donation
+
+Top Donation
+
+Alert Queue
+
+Test Alert Button
+
+==================================================
+THEMES
+==================================================
+
+Dark Mode
+
+Light Mode
+
+Purple Theme
+
+Blue Theme
+
+Custom Colors
+
+Custom Background
+
+Animated Background
+
+==================================================
+SOUNDS
+==================================================
+
+Upload MP3
+
+Volume
+
+Preview
+
+Enable
+
+Disable
+
+==================================================
+NOTIFICATIONS
+==================================================
+
+Toast
+
+Desktop Notification
+
+Unread Counter
+
+Notification Center
+
+==================================================
+ANALYTICS
+==================================================
+
+Daily Revenue
+
+Weekly Revenue
+
+Monthly Revenue
+
+Yearly Revenue
+
+Top Donators
+
+Average Donation
+
+Highest Donation
+
+Charts
+
+==================================================
+SECURITY
+==================================================
+
+Helmet
+
+Rate Limiter
+
+CSRF Protection
+
+XSS Protection
+
+SQL Injection Protection
+
+Input Validation
+
+Audit Logs
+
+Secure Headers
+
+Environment Validation
+
+==================================================
+DATABASE
+==================================================
+
+Users
+
+Donations
+
+Payments
+
+PaymentMethods
+
+Goals
+
+Notifications
+
+Themes
+
+Sounds
+
+ActivityLogs
+
+Settings
+
+Sessions
+
+==================================================
+PERFORMANCE
+==================================================
+
+SSR
+
+Lazy Loading
+
+Code Splitting
+
+Caching
+
+Compression
+
+Optimized Images
+
+Bundle Optimization
+
+==================================================
+RESPONSIVE
+==================================================
+
+Desktop
+
+Tablet
+
+Mobile
+
+==================================================
+ACCESSIBILITY
+==================================================
+
+Keyboard Navigation
+
+ARIA Labels
+
+High Contrast
+
+==================================================
+TESTING
+==================================================
+
+Unit Tests
+
+Integration Tests
+
+API Tests
+
+End-to-End Tests
+
+==================================================
+DEPLOYMENT
+==================================================
+
+Dockerfile
+
+Docker Compose
+
+Nginx
+
+PM2
+
+HTTPS
+
+Production Scripts
+
+==================================================
+DOCUMENTATION
+==================================================
+
+README.md
+
+API Documentation
+
+Database Documentation
+
+Deployment Guide
+
+OBS Setup Guide
+
+ABA PayWay Setup Guide
+
+==================================================
+FINAL REQUIREMENTS
+==================================================
+
+The project must be fully functional.
+
+No placeholder pages.
+
+No fake data in production mode.
+
+No TypeScript errors.
+
+No ESLint errors.
+
+Production-ready.
+
+Fully responsive.
+
+Professional UI.
+
+Maintainable code.
+
+Generate clean folder structure.
+
+Generate reusable React components.
+
+Generate complete database migrations.
+
+Generate seed data.
+
+Generate complete API.
+
+Generate complete documentation.
+
+Run the project successfully.
+
+Build successfully.
+
+Fix every error automatically until the application is fully operational.

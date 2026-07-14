@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "IMUZAKI DONATION HUB"
+version = "1.0.0"
+id = "artifacts/donation-hub"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21728
+
+[services.development]
+run = "pnpm --filter @workspace/donation-hub run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/donation-hub", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/donation-hub/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21728"
+BASE_PATH = "/"

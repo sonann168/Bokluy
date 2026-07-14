@@ -3,20 +3,42 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: IMUZAKI DONATION HUB API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: donations
+    description: Donation management
+  - name: goals
+    description: Donation goals
+  - name: analytics
+    description: Revenue analytics
+  - name: settings
+    description: Platform settings
+  - name: notifications
+    description: Notifications
+  - name: activity-logs
+    description: Activity logs
+  - name: payments
+    description: Payment processing
+  - name: overlay
+    description: OBS overlay
+  - name: sounds
+    description: Sound alerts
+  - name: dashboard
+    description: Dashboard summary
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +46,1130 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # AUTH
+  /auth/login:
+    post:
+      operationId: adminLogin
+      tags: [auth]
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: adminLogout
+      tags: [auth]
+      summary: Admin logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /auth/me:
+    get:
+      operationId: getAuthUser
+      tags: [auth]
+      summary: Get current authenticated user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminUser"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # DONATIONS
+  /donations:
+    get:
+      operationId: listDonations
+      tags: [donations]
+      summary: List donations with filtering and pagination
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, paid, failed, cancelled, refunded]
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Paginated donations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedDonations"
+
+    post:
+      operationId: createDonation
+      tags: [donations]
+      summary: Create a new donation (public)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DonationInput"
+      responses:
+        "201":
+          description: Donation created with payment URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DonationCreated"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /donations/recent:
+    get:
+      operationId: getRecentDonations
+      tags: [donations]
+      summary: Get recent donations (public)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Recent donations list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Donation"
+
+  /donations/top:
+    get:
+      operationId: getTopDonors
+      tags: [donations]
+      summary: Get top donors (public)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [all, month, week]
+            default: all
+      responses:
+        "200":
+          description: Top donors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopDonor"
+
+  /donations/{id}:
+    get:
+      operationId: getDonation
+      tags: [donations]
+      summary: Get donation by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Donation detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Donation"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    patch:
+      operationId: updateDonation
+      tags: [donations]
+      summary: Update donation status (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DonationUpdate"
+      responses:
+        "200":
+          description: Updated donation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Donation"
+
+    delete:
+      operationId: deleteDonation
+      tags: [donations]
+      summary: Delete donation (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # GOALS
+  /goals:
+    get:
+      operationId: listGoals
+      tags: [goals]
+      summary: Get all donation goals (public)
+      responses:
+        "200":
+          description: Goals list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Goal"
+
+    post:
+      operationId: createGoal
+      tags: [goals]
+      summary: Create a donation goal (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoalInput"
+      responses:
+        "201":
+          description: Created goal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+
+  /goals/{id}:
+    get:
+      operationId: getGoal
+      tags: [goals]
+      summary: Get goal by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Goal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+
+    patch:
+      operationId: updateGoal
+      tags: [goals]
+      summary: Update goal (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoalUpdate"
+      responses:
+        "200":
+          description: Updated goal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Goal"
+
+    delete:
+      operationId: deleteGoal
+      tags: [goals]
+      summary: Delete goal (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # ANALYTICS
+  /analytics/summary:
+    get:
+      operationId: getAnalyticsSummary
+      tags: [analytics]
+      summary: Get dashboard summary stats (admin)
+      responses:
+        "200":
+          description: Summary stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyticsSummary"
+
+  /analytics/revenue:
+    get:
+      operationId: getRevenueAnalytics
+      tags: [analytics]
+      summary: Get revenue over time (admin)
+      parameters:
+        - name: period
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [daily, weekly, monthly, yearly]
+      responses:
+        "200":
+          description: Revenue data points
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RevenueDataPoint"
+
+  # DASHBOARD
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get full dashboard summary with recent donations and top donors (admin)
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  # SETTINGS
+  /settings:
+    get:
+      operationId: getSettings
+      tags: [settings]
+      summary: Get platform settings (admin)
+      responses:
+        "200":
+          description: Settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+
+    patch:
+      operationId: updateSettings
+      tags: [settings]
+      summary: Update platform settings (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SettingsUpdate"
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+
+  # NOTIFICATIONS
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags: [notifications]
+      summary: List notifications (admin)
+      parameters:
+        - name: unreadOnly
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/{id}/read:
+    patch:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark notification as read (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated notification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+
+  /notifications/read-all:
+    patch:
+      operationId: markAllNotificationsRead
+      tags: [notifications]
+      summary: Mark all notifications as read (admin)
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  # ACTIVITY LOGS
+  /activity-logs:
+    get:
+      operationId: listActivityLogs
+      tags: [activity-logs]
+      summary: List activity logs (admin)
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: Activity logs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedActivityLogs"
+
+  # PAYMENTS
+  /payments/create:
+    post:
+      operationId: createPayment
+      tags: [payments]
+      summary: Create ABA PayWay payment request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentInput"
+      responses:
+        "200":
+          description: Payment created with redirect URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentResponse"
+
+  /payments/callback:
+    post:
+      operationId: handlePaymentCallback
+      tags: [payments]
+      summary: ABA PayWay payment callback/webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentCallbackInput"
+      responses:
+        "200":
+          description: Callback processed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /payments/{donationId}/status:
+    get:
+      operationId: getPaymentStatus
+      tags: [payments]
+      summary: Get payment status for a donation
+      parameters:
+        - name: donationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Payment status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentStatus"
+
+  # OBS OVERLAY
+  /overlay/data:
+    get:
+      operationId: getOverlayData
+      tags: [overlay]
+      summary: Get overlay data (public, for OBS browser source)
+      responses:
+        "200":
+          description: Overlay data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OverlayData"
+
+  /overlay/test-alert:
+    post:
+      operationId: sendTestAlert
+      tags: [overlay]
+      summary: Send a test alert to OBS overlay (admin)
+      responses:
+        "200":
+          description: Test alert sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  # SOUNDS
+  /sounds:
+    get:
+      operationId: listSounds
+      tags: [sounds]
+      summary: List available alert sounds (admin)
+      responses:
+        "200":
+          description: Sounds list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sound"
+
+    post:
+      operationId: createSound
+      tags: [sounds]
+      summary: Register a new alert sound (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SoundInput"
+      responses:
+        "201":
+          description: Sound created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sound"
+
+  /sounds/{id}:
+    patch:
+      operationId: updateSound
+      tags: [sounds]
+      summary: Update sound settings (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SoundUpdate"
+      responses:
+        "200":
+          description: Updated sound
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sound"
+
+    delete:
+      operationId: deleteSound
+      tags: [sounds]
+      summary: Delete a sound (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
         status:
           type: string
-      required:
-        - status
 
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+
+    SuccessResponse:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+        message:
+          type: ["string", "null"]
+
+    # AUTH
+    AdminLoginInput:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/AdminUser"
+
+    AdminUser:
+      type: object
+      required: [id, username, email]
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+
+    # DONATIONS
+    Donation:
+      type: object
+      required: [id, donorName, amount, currency, status, createdAt]
+      properties:
+        id:
+          type: integer
+        donorName:
+          type: string
+        isAnonymous:
+          type: boolean
+        amount:
+          type: number
+        currency:
+          type: string
+        message:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [pending, paid, failed, cancelled, refunded]
+        paymentMethod:
+          type: string
+        transactionId:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    DonationInput:
+      type: object
+      required: [donorName, amount, currency]
+      properties:
+        donorName:
+          type: string
+          minLength: 1
+        isAnonymous:
+          type: boolean
+        amount:
+          type: number
+          minimum: 1
+        currency:
+          type: string
+        message:
+          type: string
+
+    DonationUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, paid, failed, cancelled, refunded]
+
+    DonationCreated:
+      type: object
+      required: [donation, paymentUrl]
+      properties:
+        donation:
+          $ref: "#/components/schemas/Donation"
+        paymentUrl:
+          type: string
+
+    PaginatedDonations:
+      type: object
+      required: [data, total, page, limit]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Donation"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+
+    TopDonor:
+      type: object
+      required: [donorName, totalAmount, donationCount]
+      properties:
+        donorName:
+          type: string
+        totalAmount:
+          type: number
+        donationCount:
+          type: integer
+        lastDonationAt:
+          type: ["string", "null"]
+
+    # GOALS
+    Goal:
+      type: object
+      required: [id, title, targetAmount, currentAmount, currency, isActive]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        currency:
+          type: string
+        isActive:
+          type: boolean
+        endsAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    GoalInput:
+      type: object
+      required: [title, targetAmount, currency]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        description:
+          type: string
+        targetAmount:
+          type: number
+          minimum: 1
+        currency:
+          type: string
+        isActive:
+          type: boolean
+        endsAt:
+          type: string
+
+    GoalUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        currency:
+          type: string
+        isActive:
+          type: boolean
+        endsAt:
+          type: ["string", "null"]
+
+    # ANALYTICS
+    AnalyticsSummary:
+      type: object
+      required: [todayRevenue, weekRevenue, monthRevenue, totalRevenue, totalDonations, averageDonation, highestDonation]
+      properties:
+        todayRevenue:
+          type: number
+        weekRevenue:
+          type: number
+        monthRevenue:
+          type: number
+        totalRevenue:
+          type: number
+        totalDonations:
+          type: integer
+        averageDonation:
+          type: number
+        highestDonation:
+          type: number
+
+    RevenueDataPoint:
+      type: object
+      required: [label, revenue, count]
+      properties:
+        label:
+          type: string
+        revenue:
+          type: number
+        count:
+          type: integer
+
+    DashboardSummary:
+      type: object
+      required: [analytics, recentDonations, topDonors, activeGoal]
+      properties:
+        analytics:
+          $ref: "#/components/schemas/AnalyticsSummary"
+        recentDonations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Donation"
+        topDonors:
+          type: array
+          items:
+            $ref: "#/components/schemas/TopDonor"
+        activeGoal:
+          $ref: "#/components/schemas/Goal"
+          nullable: true
+
+    # SETTINGS
+    Settings:
+      type: object
+      required: [id, streamerName, currency, minDonationAmount, alertDuration, theme]
+      properties:
+        id:
+          type: integer
+        streamerName:
+          type: string
+        streamerBio:
+          type: ["string", "null"]
+        currency:
+          type: string
+        minDonationAmount:
+          type: number
+        alertDuration:
+          type: integer
+        theme:
+          type: string
+        overlayAlertEnabled:
+          type: boolean
+        soundEnabled:
+          type: boolean
+        activeSoundId:
+          type: ["integer", "null"]
+        updatedAt:
+          type: string
+
+    SettingsUpdate:
+      type: object
+      properties:
+        streamerName:
+          type: string
+        streamerBio:
+          type: string
+        currency:
+          type: string
+        minDonationAmount:
+          type: number
+        alertDuration:
+          type: integer
+        theme:
+          type: string
+        overlayAlertEnabled:
+          type: boolean
+        soundEnabled:
+          type: boolean
+        activeSoundId:
+          type: ["integer", "null"]
+
+    # NOTIFICATIONS
+    Notification:
+      type: object
+      required: [id, type, title, message, isRead, createdAt]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        title:
+          type: string
+        message:
+          type: string
+        isRead:
+          type: boolean
+        donationId:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+
+    # ACTIVITY LOGS
+    ActivityLog:
+      type: object
+      required: [id, action, description, createdAt]
+      properties:
+        id:
+          type: integer
+        action:
+          type: string
+        description:
+          type: string
+        ipAddress:
+          type: ["string", "null"]
+        userId:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+
+    PaginatedActivityLogs:
+      type: object
+      required: [data, total, page, limit]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityLog"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+
+    # PAYMENTS
+    PaymentInput:
+      type: object
+      required: [donationId, amount, currency]
+      properties:
+        donationId:
+          type: integer
+        amount:
+          type: number
+        currency:
+          type: string
+
+    PaymentResponse:
+      type: object
+      required: [paymentUrl, transactionId]
+      properties:
+        paymentUrl:
+          type: string
+        transactionId:
+          type: string
+
+    PaymentCallbackInput:
+      type: object
+      required: [tran_id, status]
+      properties:
+        tran_id:
+          type: string
+        status:
+          type: string
+        hash:
+          type: ["string", "null"]
+        amount:
+          type: ["number", "null"]
+        currency:
+          type: ["string", "null"]
+
+    PaymentStatus:
+      type: object
+      required: [donationId, status]
+      properties:
+        donationId:
+          type: integer
+        status:
+          type: string
+          enum: [pending, paid, failed, cancelled, refunded]
+        transactionId:
+          type: ["string", "null"]
+        paidAt:
+          type: ["string", "null"]
+
+    # OVERLAY
+    OverlayData:
+      type: object
+      required: [latestDonation, topDonation, activeGoal, settings]
+      properties:
+        latestDonation:
+          $ref: "#/components/schemas/Donation"
+          nullable: true
+        topDonation:
+          $ref: "#/components/schemas/Donation"
+          nullable: true
+        activeGoal:
+          $ref: "#/components/schemas/Goal"
+          nullable: true
+        settings:
+          type: object
+          required: [alertDuration, soundEnabled, streamerName]
+          properties:
+            alertDuration:
+              type: integer
+            soundEnabled:
+              type: boolean
+            streamerName:
+              type: string
+
+    # SOUNDS
+    Sound:
+      type: object
+      required: [id, name, url, isActive, volume]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        url:
+          type: string
+        isActive:
+          type: boolean
+        volume:
+          type: integer
+        createdAt:
+          type: string
+
+    SoundInput:
+      type: object
+      required: [name, url]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        url:
+          type: string
+        isActive:
+          type: boolean
+        volume:
+          type: integer
+          minimum: 0
+          maximum: 100
+
+    SoundUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+        isActive:
+          type: boolean
+        volume:
+          type: integer
+          minimum: 0
+          maximum: 100
