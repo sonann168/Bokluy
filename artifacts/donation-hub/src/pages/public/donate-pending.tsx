@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { useGetPaymentStatus } from '@workspace/api-client-react';
+import { useGetPaymentStatus, getGetPaymentStatusQueryKey } from '@workspace/api-client-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw } from 'lucide-react';
@@ -12,17 +12,18 @@ export default function DonatePending() {
   const donationId = idStr ? parseInt(idStr, 10) : null;
 
   const { data: statusData, refetch, isFetching } = useGetPaymentStatus(
-    donationId as number, 
-    { 
-      query: { 
+    donationId as number,
+    {
+      query: {
+        queryKey: getGetPaymentStatusQueryKey(donationId as number),
         enabled: !!donationId,
-        refetchInterval: (data) => {
-          // Keep polling if status is still pending, stop if success or failed
-          if (!data) return 3000;
-          if (data.status === 'pending') return 3000;
+        refetchInterval: (query) => {
+          const d = query.state.data;
+          if (!d) return 3000;
+          if (d.status === 'pending') return 3000;
           return false;
-        }
-      } 
+        },
+      },
     }
   );
 

@@ -1,0 +1,508 @@
+The existing project is already implemented.
+
+DO NOT create a new project.
+
+DO NOT replace the existing architecture.
+
+DO NOT remove existing working features.
+
+Your task is to inspect the current codebase and COMPLETE every missing production feature.
+
+=========================================================
+PHASE 1 — FULL PROJECT ANALYSIS
+=========================================================
+
+Before writing any code:
+
+1. Inspect the entire project.
+
+2. Analyze
+
+- Folder Structure
+- Frontend
+- Backend
+- Database
+- APIs
+- Authentication
+- Payment
+- Overlay
+- Socket.IO
+- Build System
+
+3. Generate a complete audit report.
+
+4. List every missing feature.
+
+5. Then begin implementation automatically.
+
+=========================================================
+PHASE 2 — COMPLETE NEXT.JS FRONTEND
+=========================================================
+
+If the project does not contain a complete Next.js App Router frontend,
+
+build one.
+
+Requirements
+
+Next.js latest
+
+App Router
+
+TypeScript
+
+Responsive
+
+SEO Ready
+
+Dark Mode
+
+Loading Pages
+
+Error Pages
+
+Not Found Page
+
+Layouts
+
+Metadata
+
+Dynamic Routing
+
+Image Optimization
+
+Fonts
+
+Server Components where appropriate
+
+Create pages:
+
+/
+
+About
+
+Donate
+
+Success
+
+Failed
+
+Privacy
+
+Terms
+
+Admin Login
+
+Dashboard
+
+Settings
+
+Analytics
+
+Donations
+
+Payments
+
+Overlay
+
+Notifications
+
+Profile
+
+Goals
+
+Themes
+
+=========================================================
+PHASE 3 — COMPLETE REACT COMPONENTS
+=========================================================
+
+Create reusable components.
+
+Examples
+
+Navbar
+
+Sidebar
+
+Footer
+
+Header
+
+Cards
+
+Buttons
+
+Inputs
+
+Tables
+
+Charts
+
+Statistics
+
+Alert Popup
+
+Goal Bar
+
+Donation Form
+
+Avatar
+
+Payment Card
+
+Recent Donation
+
+Top Donator
+
+Notification
+
+Loading Spinner
+
+Skeleton Loader
+
+Empty State
+
+Error State
+
+Confirmation Dialog
+
+Toast
+
+Modal
+
+Everything must be reusable.
+
+=========================================================
+PHASE 4 — COMPLETE TAILWIND + SHADCN UI
+=========================================================
+
+Install and configure
+
+Tailwind CSS
+
+ShadCN UI
+
+Create
+
+Theme Provider
+
+Dark Mode
+
+Light Mode
+
+Glassmorphism
+
+Gaming UI
+
+Rounded Components
+
+Reusable Design Tokens
+
+Typography System
+
+Spacing System
+
+Animation System
+
+Responsive Utilities
+
+=========================================================
+PHASE 5 — COMPLETE DATABASE
+=========================================================
+
+Review database.
+
+If incomplete,
+
+improve it.
+
+Generate
+
+schema
+
+relations
+
+indexes
+
+constraints
+
+timestamps
+
+soft delete
+
+migration files
+
+seed files
+
+Tables
+
+users
+
+donations
+
+payments
+
+payment_methods
+
+notifications
+
+goals
+
+themes
+
+sounds
+
+activity_logs
+
+settings
+
+sessions
+
+=========================================================
+PHASE 6 — COMPLETE MIGRATIONS
+=========================================================
+
+Generate
+
+Migration files
+
+Seed script
+
+Database initialization
+
+Database reset
+
+Database backup script
+
+=========================================================
+PHASE 7 — DOCKER
+=========================================================
+
+Generate
+
+Dockerfile
+
+docker-compose.yml
+
+.devcontainer
+
+Production image
+
+Development image
+
+Environment Variables
+
+Healthcheck
+
+=========================================================
+PHASE 8 — NGINX
+=========================================================
+
+Generate
+
+Nginx configuration
+
+Reverse Proxy
+
+HTTPS Ready
+
+Compression
+
+Caching
+
+Security Headers
+
+Rate Limiting
+
+Static Asset Optimization
+
+=========================================================
+PHASE 9 — README
+=========================================================
+
+Generate a professional README.
+
+Include
+
+Project Overview
+
+Features
+
+Architecture
+
+Folder Structure
+
+Installation
+
+Configuration
+
+Environment Variables
+
+Database Setup
+
+Run Development
+
+Run Production
+
+Docker
+
+Nginx
+
+Deployment
+
+OBS Setup
+
+PayWay Setup
+
+Troubleshooting
+
+FAQ
+
+=========================================================
+PHASE 10 — TESTING
+=========================================================
+
+Create
+
+Unit Tests
+
+Integration Tests
+
+API Tests
+
+End-to-End Tests
+
+Testing utilities
+
+Mock services
+
+Coverage configuration
+
+CI Ready
+
+=========================================================
+PHASE 11 — CODE QUALITY
+=========================================================
+
+Fix
+
+TypeScript Errors
+
+ESLint Errors
+
+Unused Imports
+
+Dead Code
+
+Duplicate Code
+
+Missing Types
+
+Improve Folder Structure
+
+Improve Reusable Components
+
+Improve Naming
+
+Improve Comments
+
+=========================================================
+PHASE 12 — SECURITY
+=========================================================
+
+Implement
+
+Helmet
+
+Rate Limiter
+
+CSRF
+
+XSS Protection
+
+SQL Injection Protection
+
+Secure Cookies
+
+JWT Validation
+
+Environment Validation
+
+Input Validation
+
+Audit Logs
+
+=========================================================
+PHASE 13 — PERFORMANCE
+=========================================================
+
+Improve
+
+Lazy Loading
+
+Caching
+
+SSR
+
+Image Optimization
+
+Bundle Splitting
+
+Compression
+
+Code Splitting
+
+=========================================================
+PHASE 14 — FINAL VERIFICATION
+=========================================================
+
+Run
+
+npm install
+
+Build
+
+Lint
+
+Type Check
+
+Run Tests
+
+Verify APIs
+
+Verify Database
+
+Verify Socket.IO
+
+Verify OBS Overlay
+
+Verify ABA PayWay Integration
+
+Verify Authentication
+
+Fix every error automatically.
+
+=========================================================
+FINAL OUTPUT
+=========================================================
+
+Do NOT stop after one task.
+
+Continue until everything is completed.
+
+At the end generate:
+
+1. Project Audit Report
+
+2. Completed Features
+
+3. Fixed Bugs
+
+4. Added Features
+
+5. Remaining Issues (if any)
+
+6. Deployment Instructions
+
+The project must be production-ready and deploy successfully without manual fixes.

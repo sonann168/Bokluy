@@ -67,8 +67,8 @@ export default function Overlay() {
       // Play sound if enabled
       if (initialData?.settings?.soundEnabled && nextAlert.soundUrl) {
         const audio = new Audio(nextAlert.soundUrl);
-        audio.volume = 0.5; // Default volume, real app would get from sound setting
-        audio.play().catch(e => console.log('Audio play failed', e));
+        audio.volume = 0.5;
+        audio.play().catch(() => {});
       }
 
       // Dismiss after duration
@@ -79,6 +79,7 @@ export default function Overlay() {
 
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [alerts, currentAlert, initialData]);
 
   const formatMoney = (amount: number) => {

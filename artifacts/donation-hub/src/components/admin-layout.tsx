@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'wouter';
 import { ReactNode, useEffect } from 'react';
-import { useGetAuthUser, useAdminLogout } from '@workspace/api-client-react';
+import { useGetAuthUser, useAdminLogout, getGetAuthUserQueryKey } from '@workspace/api-client-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { 
@@ -14,7 +14,9 @@ import {
   Bell, 
   ActivitySquare,
   LogOut,
-  Menu
+  CreditCard,
+  Palette,
+  User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,15 +36,18 @@ interface AdminLayoutProps {
 }
 
 const navItems = [
-  { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
-  { title: "Donations", url: "/admin/donations", icon: Coins },
-  { title: "Analytics", url: "/admin/analytics", icon: BarChart3 },
-  { title: "Goals", url: "/admin/goals", icon: Target },
-  { title: "Overlay", url: "/admin/overlay", icon: MonitorPlay },
-  { title: "Settings", url: "/admin/settings", icon: Settings },
-  { title: "Sounds", url: "/admin/sounds", icon: Volume2 },
-  { title: "Notifications", url: "/admin/notifications", icon: Bell },
-  { title: "Activity Logs", url: "/admin/activity-logs", icon: ActivitySquare },
+  { title: "Dashboard",     url: "/admin",                icon: LayoutDashboard },
+  { title: "Donations",     url: "/admin/donations",      icon: Coins },
+  { title: "Payments",      url: "/admin/payments",       icon: CreditCard },
+  { title: "Analytics",     url: "/admin/analytics",      icon: BarChart3 },
+  { title: "Goals",         url: "/admin/goals",          icon: Target },
+  { title: "Overlay",       url: "/admin/overlay",        icon: MonitorPlay },
+  { title: "Notifications", url: "/admin/notifications",  icon: Bell },
+  { title: "Sounds",        url: "/admin/sounds",         icon: Volume2 },
+  { title: "Themes",        url: "/admin/themes",         icon: Palette },
+  { title: "Settings",      url: "/admin/settings",       icon: Settings },
+  { title: "Activity Logs", url: "/admin/activity-logs",  icon: ActivitySquare },
+  { title: "Profile",       url: "/admin/profile",        icon: User },
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
@@ -50,8 +55,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const { toast } = useToast();
   const { data: user, isLoading, isError } = useGetAuthUser({
     query: {
-      retry: false
-    }
+      queryKey: getGetAuthUserQueryKey(),
+      retry: false,
+    },
   });
 
   const logoutMutation = useAdminLogout({

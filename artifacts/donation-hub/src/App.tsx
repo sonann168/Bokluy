@@ -25,6 +25,9 @@ import AdminSettings from '@/pages/admin/settings';
 import AdminSounds from '@/pages/admin/sounds';
 import AdminNotifications from '@/pages/admin/notifications';
 import AdminActivityLogs from '@/pages/admin/activity-logs';
+import AdminThemes from '@/pages/admin/themes';
+import AdminProfile from '@/pages/admin/profile';
+import AdminPayments from '@/pages/admin/payments';
 
 import Overlay from '@/pages/overlay';
 import AdminLayout from '@/components/admin-layout';
@@ -35,7 +38,12 @@ const queryClient = new QueryClient();
 // Set auth token getter for all API calls
 setAuthTokenGetter(() => localStorage.getItem('admin_token'));
 
-function AdminRoute({ component: Component, ...rest }: any) {
+interface AdminRouteProps {
+  component: React.ComponentType;
+  [key: string]: unknown;
+}
+
+function AdminRoute({ component: Component, ...rest }: AdminRouteProps) {
   const [location, setLocation] = useLocation();
   
   useEffect(() => {
@@ -81,6 +89,9 @@ function Router() {
       <Route path="/admin/sounds" component={() => <AdminRoute component={AdminSounds} />} />
       <Route path="/admin/notifications" component={() => <AdminRoute component={AdminNotifications} />} />
       <Route path="/admin/activity-logs" component={() => <AdminRoute component={AdminActivityLogs} />} />
+      <Route path="/admin/themes" component={() => <AdminRoute component={AdminThemes} />} />
+      <Route path="/admin/profile" component={() => <AdminRoute component={AdminProfile} />} />
+      <Route path="/admin/payments" component={() => <AdminRoute component={AdminPayments} />} />
 
       {/* 404 */}
       <Route component={NotFound} />

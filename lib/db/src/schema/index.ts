@@ -5,3 +5,6 @@ export * from "./notifications";
 export * from "./activityLogs";
 export * from "./settings";
 export * from "./sounds";
+export * from "./themes";
+export * from "./paymentMethods";
+export * from "./sessions";

@@ -10,7 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Search, MoreVertical, Coins, CheckCircle, XCircle, Clock, RotateCcw } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
-import { useDebounce } from '@/hooks/use-debounce'; // Will need to create this or just implement inline
+import { keepPreviousData } from '@tanstack/react-query';
 
 // Simple debounce function for inline use if hook is missing
 function useDebouncedValue<T>(value: T, delay: number): T {
@@ -45,7 +45,7 @@ export default function AdminDonations() {
   };
 
   const { data, isLoading } = useListDonations(queryParams, {
-    query: { keepPreviousData: true }
+    query: { queryKey: getListDonationsQueryKey(queryParams), placeholderData: keepPreviousData },
   });
 
   const updateMutation = useUpdateDonation({

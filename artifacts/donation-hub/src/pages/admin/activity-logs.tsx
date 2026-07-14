@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useListActivityLogs } from '@workspace/api-client-react';
+import { useListActivityLogs, getListActivityLogsQueryKey } from '@workspace/api-client-react';
+import { keepPreviousData } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -9,7 +10,7 @@ import { format } from 'date-fns';
 export default function AdminActivityLogs() {
   const [page, setPage] = useState(1);
   const { data, isLoading } = useListActivityLogs({ page, limit: 15 }, {
-    query: { keepPreviousData: true }
+    query: { queryKey: getListActivityLogsQueryKey({ page, limit: 15 }), placeholderData: keepPreviousData },
   });
 
   return (
