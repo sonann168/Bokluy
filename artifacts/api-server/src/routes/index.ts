@@ -1,5 +1,4 @@
 import { Router } from "express";
-import healthRouter from "./health";
 import authRouter from "./auth";
 import donationsRouter from "./donations";
 import goalsRouter from "./goals";
@@ -13,16 +12,20 @@ import soundsRouter from "./sounds";
 
 const router = Router();
 
-router.use(healthRouter);
-router.use(authRouter);
-router.use(donationsRouter);
-router.use(goalsRouter);
-router.use(analyticsRouter);
-router.use(settingsRouter);
-router.use(notificationsRouter);
-router.use(activityLogsRouter);
-router.use(paymentsRouter);
-router.use(overlayRouter);
-router.use(soundsRouter);
+// Health check
+router.get("/health", (_req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+router.use("/auth", authRouter);
+router.use("/donations", donationsRouter);
+router.use("/goals", goalsRouter);
+router.use("/analytics", analyticsRouter);
+router.use("/settings", settingsRouter);
+router.use("/notifications", notificationsRouter);
+router.use("/activity-logs", activityLogsRouter);
+router.use("/payments", paymentsRouter);
+router.use("/overlay", overlayRouter);
+router.use("/sounds", soundsRouter);
 
 export default router;

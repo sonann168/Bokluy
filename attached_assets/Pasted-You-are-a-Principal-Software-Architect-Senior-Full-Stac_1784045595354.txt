@@ -1,0 +1,517 @@
+You are a Principal Software Architect, Senior Full Stack Engineer, DevOps Engineer, QA Engineer, UI/UX Designer, and Security Engineer.
+
+The current project is already functional.
+
+DO NOT rebuild the project.
+
+DO NOT replace the backend.
+
+DO NOT remove existing APIs.
+
+DO NOT remove PayWay integration.
+
+DO NOT remove Socket.IO.
+
+DO NOT change working business logic.
+
+Your task is ONLY to complete the missing production features.
+
+==========================================================
+STEP 1
+PROJECT AUDIT
+==========================================================
+
+Inspect the entire repository first.
+
+Analyze
+
+• Folder Structure
+• Backend
+• Frontend
+• Database
+• Authentication
+• Socket.IO
+• PayWay
+• API
+• Overlay
+
+Generate an audit report.
+
+After the audit automatically continue implementation.
+
+==========================================================
+STEP 2
+NEXT.JS APP ROUTER
+==========================================================
+
+The project currently lacks a complete frontend.
+
+Build a complete frontend using
+
+Next.js Latest
+
+App Router
+
+TypeScript
+
+React 19
+
+Requirements
+
+Create
+
+app/
+
+layout.tsx
+
+page.tsx
+
+loading.tsx
+
+error.tsx
+
+not-found.tsx
+
+metadata.ts
+
+Create routes
+
+/
+
+about
+
+donate
+
+success
+
+failed
+
+privacy
+
+terms
+
+login
+
+dashboard
+
+dashboard/overview
+
+dashboard/donations
+
+dashboard/payments
+
+dashboard/analytics
+
+dashboard/settings
+
+dashboard/themes
+
+dashboard/overlay
+
+dashboard/profile
+
+dashboard/notifications
+
+dashboard/activity
+
+dashboard/goals
+
+Everything must be responsive.
+
+==========================================================
+STEP 3
+REACT COMPONENT LIBRARY
+==========================================================
+
+Create reusable components.
+
+Components
+
+Navbar
+
+Sidebar
+
+Header
+
+Footer
+
+PageHeader
+
+Card
+
+Statistic Card
+
+Button
+
+Input
+
+Textarea
+
+Checkbox
+
+Radio
+
+Switch
+
+Avatar
+
+Badge
+
+Dropdown
+
+Dialog
+
+Modal
+
+Table
+
+Pagination
+
+DataTable
+
+Search Box
+
+Filter Panel
+
+Chart Card
+
+Donation Form
+
+Payment Card
+
+Goal Card
+
+Alert Popup
+
+Toast
+
+Notification Card
+
+Skeleton
+
+Spinner
+
+Empty State
+
+Error State
+
+Everything reusable.
+
+==========================================================
+STEP 4
+TAILWIND + SHADCN
+==========================================================
+
+Install and configure
+
+TailwindCSS
+
+ShadCN UI
+
+Configure
+
+tailwind.config
+
+globals.css
+
+theme variables
+
+Dark Mode
+
+Light Mode
+
+Gaming Theme
+
+Purple Theme
+
+Glass Effect
+
+Gradient Background
+
+Rounded Components
+
+Animations
+
+Responsive Utilities
+
+Typography System
+
+Spacing System
+
+Color Tokens
+
+==========================================================
+STEP 5
+DESIGN SYSTEM
+==========================================================
+
+Create a complete design system.
+
+Include
+
+Typography
+
+Colors
+
+Spacing
+
+Border Radius
+
+Elevation
+
+Shadow
+
+Animation
+
+Icons
+
+Component Guidelines
+
+Reusable Theme Tokens
+
+==========================================================
+STEP 6
+THEME PROVIDER
+==========================================================
+
+Implement
+
+ThemeProvider
+
+Dark Mode
+
+Light Mode
+
+Persistent Theme
+
+System Theme
+
+Theme Toggle
+
+==========================================================
+STEP 7
+DATABASE
+==========================================================
+
+Create
+
+schema.prisma
+
+Complete Models
+
+Relations
+
+Enums
+
+Indexes
+
+Constraints
+
+Soft Delete
+
+createdAt
+
+updatedAt
+
+deletedAt
+
+Generate
+
+Migration Files
+
+Seed Files
+
+Database Reset Script
+
+==========================================================
+STEP 8
+DOCKER
+==========================================================
+
+Generate
+
+Dockerfile
+
+docker-compose.yml
+
+.dockerignore
+
+Development Container
+
+Production Container
+
+Health Checks
+
+Volumes
+
+Networks
+
+Environment Variables
+
+==========================================================
+STEP 9
+NGINX
+==========================================================
+
+Generate nginx.conf
+
+Configure
+
+Reverse Proxy
+
+Compression
+
+HTTPS Ready
+
+Caching
+
+Security Headers
+
+Static Assets
+
+WebSocket Support
+
+==========================================================
+STEP 10
+TESTING
+==========================================================
+
+Install
+
+Vitest
+
+Testing Library
+
+Playwright
+
+Jest (only if needed)
+
+Create
+
+Unit Tests
+
+Integration Tests
+
+API Tests
+
+Component Tests
+
+End-to-End Tests
+
+Coverage Report
+
+Test Utilities
+
+Mock Server
+
+==========================================================
+STEP 11
+QUALITY
+==========================================================
+
+Fix
+
+All TypeScript Errors
+
+All ESLint Errors
+
+Unused Imports
+
+Duplicate Code
+
+Dead Code
+
+Improve Folder Structure
+
+Improve Naming
+
+Improve Comments
+
+==========================================================
+STEP 12
+SECURITY
+==========================================================
+
+Add
+
+Helmet
+
+Rate Limiter
+
+CSRF
+
+XSS Protection
+
+SQL Injection Protection
+
+Secure Cookies
+
+Input Validation
+
+Environment Validation
+
+Audit Logs
+
+==========================================================
+STEP 13
+PERFORMANCE
+==========================================================
+
+Optimize
+
+SSR
+
+Code Splitting
+
+Image Optimization
+
+Lazy Loading
+
+Caching
+
+Compression
+
+Bundle Size
+
+==========================================================
+STEP 14
+FINAL VALIDATION
+==========================================================
+
+Run
+
+npm install
+
+npm run lint
+
+npm run type-check
+
+npm run test
+
+npm run build
+
+Fix every error automatically.
+
+==========================================================
+FINAL REPORT
+==========================================================
+
+Generate
+
+1. Audit Report
+
+2. Files Created
+
+3. Files Modified
+
+4. Features Added
+
+5. Bugs Fixed
+
+6. Remaining Issues
+
+7. Deployment Guide
+
+Do not stop until every missing feature listed above has been completed successfully.
+
+The final project must be fully production-ready without placeholders.

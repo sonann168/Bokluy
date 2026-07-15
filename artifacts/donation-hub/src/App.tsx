@@ -1,11 +1,15 @@
+import { lazy, Suspense, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { ThemeProvider } from '@/components/theme-provider';
 import NotFound from '@/pages/not-found';
 import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
-import { useEffect } from 'react';
 import { setAuthTokenGetter } from '@workspace/api-client-react';
+import AdminLayout from '@/components/admin-layout';
+import PublicLayout from '@/components/public-layout';
 
+// Public pages – small, eagerly loaded
 import LandingPage from '@/pages/public/landing';
 import DonatePage from '@/pages/public/donate';
 import DonateSuccess from '@/pages/public/donate-success';
@@ -14,29 +18,41 @@ import DonatePending from '@/pages/public/donate-pending';
 import AboutPage from '@/pages/public/about';
 import TermsPage from '@/pages/public/terms';
 import PrivacyPage from '@/pages/public/privacy';
-
-import AdminLogin from '@/pages/admin/login';
-import AdminDashboard from '@/pages/admin/dashboard';
-import AdminDonations from '@/pages/admin/donations';
-import AdminAnalytics from '@/pages/admin/analytics';
-import AdminGoals from '@/pages/admin/goals';
-import AdminOverlaySettings from '@/pages/admin/overlay-settings';
-import AdminSettings from '@/pages/admin/settings';
-import AdminSounds from '@/pages/admin/sounds';
-import AdminNotifications from '@/pages/admin/notifications';
-import AdminActivityLogs from '@/pages/admin/activity-logs';
-import AdminThemes from '@/pages/admin/themes';
-import AdminProfile from '@/pages/admin/profile';
-import AdminPayments from '@/pages/admin/payments';
-
 import Overlay from '@/pages/overlay';
-import AdminLayout from '@/components/admin-layout';
-import PublicLayout from '@/components/public-layout';
+import AdminLogin from '@/pages/admin/login';
 
-const queryClient = new QueryClient();
+// Admin pages – lazy loaded (heavy: charts, tables, socket.io)
+const AdminDashboard       = lazy(() => import('@/pages/admin/dashboard'));
+const AdminDonations       = lazy(() => import('@/pages/admin/donations'));
+const AdminAnalytics       = lazy(() => import('@/pages/admin/analytics'));
+const AdminGoals           = lazy(() => import('@/pages/admin/goals'));
+const AdminOverlaySettings = lazy(() => import('@/pages/admin/overlay-settings'));
+const AdminSettings        = lazy(() => import('@/pages/admin/settings'));
+const AdminSounds          = lazy(() => import('@/pages/admin/sounds'));
+const AdminNotifications   = lazy(() => import('@/pages/admin/notifications'));
+const AdminActivityLogs    = lazy(() => import('@/pages/admin/activity-logs'));
+const AdminThemes          = lazy(() => import('@/pages/admin/themes'));
+const AdminProfile         = lazy(() => import('@/pages/admin/profile'));
+const AdminPayments        = lazy(() => import('@/pages/admin/payments'));
 
-// Set auth token getter for all API calls
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      retry: 1,
+    },
+  },
+});
+
 setAuthTokenGetter(() => localStorage.getItem('admin_token'));
+
+function PageLoader() {
+  return (
+    <div className="flex h-full min-h-[400px] items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+    </div>
+  );
+}
 
 interface AdminRouteProps {
   component: React.ComponentType;
@@ -45,7 +61,7 @@ interface AdminRouteProps {
 
 function AdminRoute({ component: Component, ...rest }: AdminRouteProps) {
   const [location, setLocation] = useLocation();
-  
+
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
     if (!token) {
@@ -55,7 +71,9 @@ function AdminRoute({ component: Component, ...rest }: AdminRouteProps) {
 
   return (
     <AdminLayout>
-      <Component {...rest} />
+      <Suspense fallback={<PageLoader />}>
+        <Component {...rest} />
+      </Suspense>
     </AdminLayout>
   );
 }
@@ -72,26 +90,26 @@ function Router() {
       <Route path="/about" component={() => <PublicLayout><AboutPage /></PublicLayout>} />
       <Route path="/terms" component={() => <PublicLayout><TermsPage /></PublicLayout>} />
       <Route path="/privacy" component={() => <PublicLayout><PrivacyPage /></PublicLayout>} />
-      
+
       {/* Overlay Page */}
       <Route path="/overlay" component={Overlay} />
 
       {/* Admin Login */}
       <Route path="/admin/login" component={AdminLogin} />
 
-      {/* Admin Pages */}
-      <Route path="/admin" component={() => <AdminRoute component={AdminDashboard} />} />
-      <Route path="/admin/donations" component={() => <AdminRoute component={AdminDonations} />} />
-      <Route path="/admin/analytics" component={() => <AdminRoute component={AdminAnalytics} />} />
-      <Route path="/admin/goals" component={() => <AdminRoute component={AdminGoals} />} />
-      <Route path="/admin/overlay" component={() => <AdminRoute component={AdminOverlaySettings} />} />
-      <Route path="/admin/settings" component={() => <AdminRoute component={AdminSettings} />} />
-      <Route path="/admin/sounds" component={() => <AdminRoute component={AdminSounds} />} />
+      {/* Admin Pages – lazy loaded */}
+      <Route path="/admin"              component={() => <AdminRoute component={AdminDashboard} />} />
+      <Route path="/admin/donations"    component={() => <AdminRoute component={AdminDonations} />} />
+      <Route path="/admin/analytics"    component={() => <AdminRoute component={AdminAnalytics} />} />
+      <Route path="/admin/goals"        component={() => <AdminRoute component={AdminGoals} />} />
+      <Route path="/admin/overlay"      component={() => <AdminRoute component={AdminOverlaySettings} />} />
+      <Route path="/admin/settings"     component={() => <AdminRoute component={AdminSettings} />} />
+      <Route path="/admin/sounds"       component={() => <AdminRoute component={AdminSounds} />} />
       <Route path="/admin/notifications" component={() => <AdminRoute component={AdminNotifications} />} />
       <Route path="/admin/activity-logs" component={() => <AdminRoute component={AdminActivityLogs} />} />
-      <Route path="/admin/themes" component={() => <AdminRoute component={AdminThemes} />} />
-      <Route path="/admin/profile" component={() => <AdminRoute component={AdminProfile} />} />
-      <Route path="/admin/payments" component={() => <AdminRoute component={AdminPayments} />} />
+      <Route path="/admin/themes"       component={() => <AdminRoute component={AdminThemes} />} />
+      <Route path="/admin/profile"      component={() => <AdminRoute component={AdminProfile} />} />
+      <Route path="/admin/payments"     component={() => <AdminRoute component={AdminPayments} />} />
 
       {/* 404 */}
       <Route component={NotFound} />
@@ -100,19 +118,22 @@ function Router() {
 }
 
 function App() {
-  useEffect(() => {
-    document.documentElement.classList.add('dark');
-  }, []);
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+            <Router />
+          </WouterRouter>
+          <Toaster />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 

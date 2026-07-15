@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'wouter';
 import { ReactNode, useEffect } from 'react';
 import { useGetAuthUser, useAdminLogout, getGetAuthUserQueryKey } from '@workspace/api-client-react';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { 
@@ -157,6 +158,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex border-border/50 hover:border-primary/50 hover:text-primary">
                 <Link href="/overlay" target="_blank">View Overlay</Link>
               </Button>
+              <ThemeToggle />
             </div>
           </header>
           

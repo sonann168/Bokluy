@@ -1,0 +1,77 @@
+version: "3.9"
+
+# ── Shared network ────────────────────────────────────────────────
+networks:
+  app:
+    driver: bridge
+
+# ── Named volumes ─────────────────────────────────────────────────
+volumes:
+  postgres_data:
+
+services:
+  # ── PostgreSQL ─────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${POSTGRES_DB:-imuzaki_db}
+      POSTGRES_USER:     ${POSTGRES_USER:-imuzaki}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [app]
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-imuzaki}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── API Server ─────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      target: api
+    restart: unless-stopped
+    environment:
+      PORT:             "8080"
+      NODE_ENV:         "production"
+      SESSION_SECRET:   ${SESSION_SECRET:?SESSION_SECRET is required}
+      DATABASE_URL:     postgres://${POSTGRES_USER:-imuzaki}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-imuzaki_db}
+      PAYWAY_MERCHANT_ID:  ${PAYWAY_MERCHANT_ID:-}
+      PAYWAY_API_KEY:      ${PAYWAY_API_KEY:-}
+      PAYWAY_API_SECRET:   ${PAYWAY_API_SECRET:-}
+      PAYWAY_RETURN_URL:   ${PAYWAY_RETURN_URL:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [app]
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
+  # ── Frontend / nginx ──────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      target: frontend
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    networks: [app]
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3

@@ -1,2 +1,5 @@
 - [IMUZAKI Donation Hub stack](imuzaki-stack.md) — bcryptjs (not bcrypt), JWT via SESSION_SECRET, Socket.IO on same HTTP server
 - [DB lib rebuild rule](db-rebuild.md) — after adding schema files, run typecheck:libs before api-server typecheck or exports appear missing
+- [Rate limiter circular dep](rate-limiter-placement.md) — rate limiters must live in lib/limiters.ts, NOT app.ts, to avoid circular import with routes
+- [Testing setup](testing-setup.md) — Vitest in both api-server and donation-hub; @testing-library/dom must be explicitly installed alongside @testing-library/react
+- [ESLint flat config](eslint-setup.md) — ESLint v10 flat config at root eslint.config.js; drop eslint-plugin-react (incompatible with v10 flat config); use react-hooks + react-refresh only

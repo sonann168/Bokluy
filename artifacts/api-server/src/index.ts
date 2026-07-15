@@ -1,3 +1,4 @@
+import "./lib/env"; // validate environment variables on startup
 import { createServer } from "http";
 import app from "./app";
 import { logger } from "./lib/logger";

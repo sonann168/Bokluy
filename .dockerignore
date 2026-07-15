@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+**/dist
+**/.local
+**/.agents
+**/coverage
+**/*.log
+.git
+.gitignore
+.env*
+!.env.example
+docker-compose.override.yml
+README.md
+attached_assets
